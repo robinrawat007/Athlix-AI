@@ -15,6 +15,12 @@ function toISTTime(utcIso: string): string {
   return `${h}:${m}`;
 }
 
+function totalColorClass(total: number, isHit: boolean): string {
+  if (isHit) return "text-cyan-400 font-semibold";
+  if (total >= 1000) return "text-cyan-300";
+  return "text-gray-300";
+}
+
 export default function WaterWidget() {
   const [entries, setEntries] = useState<WaterEntry[]>([]);
   const [total, setTotal] = useState(0);
@@ -69,18 +75,17 @@ export default function WaterWidget() {
   const isHit = total >= TARGET_ML;
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 widget-card">
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-xs text-gray-500 uppercase tracking-widest font-medium">
-          Water
-        </p>
+    <div className="bg-gray-900 border border-gray-700/50 rounded-xl p-5 widget-card card-glow-cyan">
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-2">
+          <span className="w-0.5 h-3.5 bg-cyan-500 rounded-full" aria-hidden />
+          <p className="text-xs text-cyan-400/80 uppercase tracking-widest font-semibold">
+            Water
+          </p>
+        </div>
         {!loading && (
           <span className="text-xs tabular-nums">
-            <span
-              className={isHit ? "text-cyan-400 font-semibold" : "text-gray-300"}
-            >
-              {total}
-            </span>
+            <span className={totalColorClass(total, isHit)}>{total}</span>
             <span className="text-gray-600"> / {TARGET_ML}ml</span>
           </span>
         )}
@@ -93,27 +98,23 @@ export default function WaterWidget() {
           <Skeleton className="h-9" />
         </div>
       ) : (
-        <div className="space-y-3">
-          {/* Progress bar */}
-          <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+        <div className="space-y-4">
+          {/* Animated gradient progress bar */}
+          <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                isHit
-                  ? "bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
-                  : "bg-cyan-600"
-              }`}
+              className={`h-full rounded-full ${isHit ? "water-bar-hit" : "water-bar"}`}
               style={{ width: `${pct}%` }}
             />
           </div>
 
-          {/* Quick-add buttons — wrap on small screens */}
+          {/* Quick-add buttons */}
           <div className="flex flex-wrap gap-1.5">
             {QUICK_AMOUNTS.map((ml) => (
               <button
                 key={ml}
                 onClick={() => addWater(ml)}
                 disabled={adding}
-                className="flex-1 min-w-[3rem] py-2 text-xs text-gray-400 bg-gray-800 hover:bg-gray-700 active:bg-gray-600 rounded-lg transition-colors disabled:opacity-50 tabular-nums"
+                className="flex-1 min-w-[3rem] py-2 text-xs text-cyan-400 bg-cyan-900/40 border border-cyan-800/60 hover:bg-cyan-800/50 hover:text-cyan-300 hover:border-cyan-700 active:bg-cyan-700/50 rounded-lg transition-colors disabled:opacity-50 tabular-nums"
               >
                 +{ml}
               </button>
@@ -131,12 +132,12 @@ export default function WaterWidget() {
               onChange={(e) => setCustomAmount(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleCustomAdd()}
               placeholder="Custom ml"
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-600 focus:outline-none focus:border-gray-500 tabular-nums"
+              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/25 tabular-nums"
             />
             <button
               onClick={handleCustomAdd}
               disabled={adding || !customAmount}
-              className="px-4 py-2 min-h-[44px] text-sm bg-cyan-800 hover:bg-cyan-700 text-white rounded-lg transition-colors disabled:opacity-50"
+              className="px-4 py-2 min-h-[44px] text-sm bg-cyan-800/60 hover:bg-cyan-700/70 text-cyan-300 border border-cyan-700/50 rounded-lg transition-colors disabled:opacity-50"
             >
               Add
             </button>
@@ -146,16 +147,11 @@ export default function WaterWidget() {
           {entries.length > 0 && (
             <div className="border-t border-gray-800 pt-3 space-y-1.5 max-h-36 overflow-y-auto">
               {[...entries].reverse().map((entry) => (
-                <div
-                  key={entry.id}
-                  className="flex items-center justify-between text-xs"
-                >
+                <div key={entry.id} className="flex items-center justify-between text-xs">
                   <span className="text-gray-600 tabular-nums">
                     {entry.logged_at ? toISTTime(entry.logged_at) : "—"}
                   </span>
-                  <span className="text-gray-400 tabular-nums">
-                    {entry.amount_ml}ml
-                  </span>
+                  <span className="text-cyan-500/70 tabular-nums">{entry.amount_ml}ml</span>
                 </div>
               ))}
             </div>

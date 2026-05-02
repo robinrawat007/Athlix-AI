@@ -43,26 +43,33 @@ export default function Home() {
     <main className="min-h-screen bg-gray-950 text-gray-100 pb-20 sm:pb-0">
       <DashboardAnimator />
 
-      {/* Sticky frosted-glass header */}
-      <header className="sticky top-0 z-40 bg-gray-950/80 backdrop-blur-sm border-b border-gray-800/60">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      {/* Sticky frosted-glass header with animated gradient */}
+      <header className="sticky top-0 z-40 header-gradient backdrop-blur-md border-b border-white/8">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-widest mb-0.5">
+            <p className="text-xs text-indigo-300/60 uppercase tracking-widest mb-1">
               {displayDate}
             </p>
-            <h1 className="text-2xl font-semibold tracking-tight">{greeting}</h1>
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-white via-indigo-100 to-indigo-200 bg-clip-text text-transparent">
+              {greeting}
+            </h1>
           </div>
-          <div className="text-right">
-            <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">
-              Momentum
-            </p>
-            <MomentumScore />
+          <div className="text-right shrink-0">
+            <div className="flex items-center justify-end gap-1.5 mb-2">
+              <span className="w-0.5 h-3 bg-indigo-400 rounded-full" aria-hidden />
+              <p className="text-xs text-indigo-300/70 uppercase tracking-widest font-semibold">
+                Momentum
+              </p>
+            </div>
+            <div className="flex justify-end">
+              <MomentumScore />
+            </div>
           </div>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-        {/* 2 — Quick Vitals: Sleep · Mood · Water */}
+        {/* 2 — Quick Vitals */}
         <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div data-widget=""><SleepWidget /></div>
           <div data-widget=""><MoodWidget /></div>

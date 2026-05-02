@@ -68,11 +68,14 @@ export default function SleepWidget() {
   }
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 widget-card">
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-xs text-gray-500 uppercase tracking-widest font-medium">
-          Sleep
-        </p>
+    <div className="bg-gray-900 border border-gray-700/50 rounded-xl p-5 widget-card card-glow-violet">
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-2">
+          <span className="w-0.5 h-3.5 bg-violet-500 rounded-full" aria-hidden />
+          <p className="text-xs text-violet-400/80 uppercase tracking-widest font-semibold">
+            Sleep
+          </p>
+        </div>
         {saving && <span className="text-xs text-gray-600">saving…</span>}
       </div>
 
@@ -82,10 +85,9 @@ export default function SleepWidget() {
           <Skeleton className="h-6 w-2/3" />
         </div>
       ) : (
-        <div className="space-y-4">
-          {/* Hours */}
+        <div className="space-y-5">
           <div>
-            <label className="block text-xs text-gray-500 mb-1.5">Hours</label>
+            <label className="block text-xs text-gray-500 mb-2">Hours slept</label>
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -96,27 +98,26 @@ export default function SleepWidget() {
                 onChange={(e) => setHours(e.target.value)}
                 onBlur={handleHoursBlur}
                 placeholder="7.5"
-                className="w-20 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-600 focus:outline-none focus:border-gray-500 tabular-nums"
+                className="w-20 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500/25 tabular-nums"
               />
-              <span className="text-xs text-gray-600">hrs</span>
+              <span className="text-xs text-gray-500">hrs</span>
             </div>
           </div>
 
-          {/* Quality */}
           <div>
-            <label className="block text-xs text-gray-500 mb-1.5">
+            <label className="block text-xs text-gray-500 mb-2">
               Quality{quality > 0 ? ` — ${QUALITY_LABELS[quality]}` : ""}
             </label>
-            <div className="flex gap-2">
+            <div className="flex gap-2.5">
               {[1, 2, 3, 4, 5].map((v) => (
                 <button
                   key={v}
                   onClick={() => handleQualityClick(v)}
                   aria-label={`Quality ${v} — ${QUALITY_LABELS[v]}`}
-                  className={`w-8 h-8 rounded-full transition-colors ${
+                  className={`w-7 h-7 rounded-full transition-all duration-200 ${
                     v <= quality
-                      ? "bg-indigo-500 hover:bg-indigo-400"
-                      : "bg-gray-700 hover:bg-gray-600"
+                      ? "scale-110 bg-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.6)]"
+                      : "bg-gray-700/50 hover:bg-gray-600/70"
                   }`}
                 />
               ))}

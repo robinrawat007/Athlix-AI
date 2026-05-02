@@ -7,13 +7,7 @@ import type { WorkTask } from "@/lib/types";
 
 function GripIcon() {
   return (
-    <svg
-      viewBox="0 0 8 12"
-      width="8"
-      height="12"
-      className="text-gray-600"
-      aria-hidden
-    >
+    <svg viewBox="0 0 8 12" width="8" height="12" className="text-gray-600" aria-hidden>
       <circle cx="2" cy="2"  r="1.2" fill="currentColor" />
       <circle cx="6" cy="2"  r="1.2" fill="currentColor" />
       <circle cx="2" cy="6"  r="1.2" fill="currentColor" />
@@ -88,9 +82,7 @@ export default function WorkScheduleWidget() {
   async function deleteTask(task: WorkTask) {
     setTasks((prev) => prev.filter((t) => t.id !== task.id));
     try {
-      const res = await fetch(`/api/work-tasks?id=${task.id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(`/api/work-tasks?id=${task.id}`, { method: "DELETE" });
       const json = await res.json();
       if (!json.success) throw new Error(json.error);
     } catch {
@@ -100,8 +92,6 @@ export default function WorkScheduleWidget() {
       toast.error("Failed to delete task");
     }
   }
-
-  // ── Drag-and-drop ──────────────────────────────────────────────────────────
 
   function handleDragStart(e: React.DragEvent, index: number) {
     e.dataTransfer.effectAllowed = "move";
@@ -153,18 +143,17 @@ export default function WorkScheduleWidget() {
   const total = tasks.length;
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 min-h-48 widget-card">
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-xs text-gray-500 uppercase tracking-widest font-medium">
-          Work Schedule
-        </p>
+    <div className="bg-gray-900 border border-gray-700/50 rounded-xl p-5 min-h-48 widget-card card-glow-blue">
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-2">
+          <span className="w-0.5 h-3.5 bg-blue-500 rounded-full" aria-hidden />
+          <p className="text-xs text-blue-400/80 uppercase tracking-widest font-semibold">
+            Work Schedule
+          </p>
+        </div>
         {!loading && total > 0 && (
           <span className="text-xs tabular-nums">
-            <span
-              className={
-                done === total ? "text-emerald-400 font-semibold" : "text-gray-300"
-              }
-            >
+            <span className={done === total ? "text-emerald-400 font-semibold" : "text-gray-300"}>
               {done}
             </span>
             <span className="text-gray-600"> / {total}</span>
@@ -190,7 +179,7 @@ export default function WorkScheduleWidget() {
               onKeyDown={(e) => e.key === "Enter" && addTask()}
               placeholder="Add a task…"
               disabled={adding}
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-600 focus:outline-none focus:border-gray-500 disabled:opacity-50"
+              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/25 disabled:opacity-50"
             />
             <button
               onClick={addTask}
@@ -201,7 +190,6 @@ export default function WorkScheduleWidget() {
             </button>
           </div>
 
-          {/* Task list */}
           {tasks.length === 0 ? (
             <p className="text-sm text-gray-600 py-1">No tasks for today.</p>
           ) : (
@@ -218,11 +206,10 @@ export default function WorkScheduleWidget() {
                     ${dragIndex === idx ? "opacity-40" : "hover:bg-gray-800"}
                     ${
                       dragOverIndex === idx && dragIndex !== idx
-                        ? "border-t-2 border-indigo-500"
+                        ? "border-t-2 border-blue-500"
                         : "border-t-2 border-transparent"
                     }`}
                 >
-                  {/* Grip */}
                   <span className="flex-shrink-0 cursor-grab active:cursor-grabbing touch-none">
                     <GripIcon />
                   </span>
@@ -234,15 +221,11 @@ export default function WorkScheduleWidget() {
                     className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                       task.done
                         ? "bg-emerald-500 border-emerald-500"
-                        : "border-gray-600 bg-transparent hover:border-gray-400"
+                        : "border-gray-500 bg-transparent hover:border-blue-400"
                     }`}
                   >
                     {task.done && (
-                      <svg
-                        className="w-3 h-3 text-white"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                      >
+                      <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none">
                         <path
                           d="M2 6l3 3 5-5"
                           stroke="currentColor"
@@ -257,7 +240,7 @@ export default function WorkScheduleWidget() {
                   {/* Title with animated strikethrough */}
                   <span
                     className={`flex-1 text-sm min-w-0 relative overflow-hidden transition-colors duration-200 ${
-                      task.done ? "text-gray-500" : "text-gray-300"
+                      task.done ? "text-gray-500" : "text-gray-200"
                     }`}
                   >
                     <span

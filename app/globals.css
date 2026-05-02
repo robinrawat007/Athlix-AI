@@ -16,24 +16,62 @@ body {
   100% { background-position: -200% 0; }
 }
 .animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    #1f2937 25%,
-    #374151 50%,
-    #1f2937 75%
-  );
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s linear infinite;
 }
 
-/* ── Widget card hover glow ─────────────────────────────────── */
+/* ── Header animated gradient ───────────────────────────────── */
+@keyframes header-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+.header-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(30, 27, 75, 0.93),
+    rgba(46, 16, 101, 0.91),
+    rgba(15, 23, 42,  0.95),
+    rgba(30, 27, 75,  0.93),
+    rgba(46, 16, 101, 0.91),
+    rgba(15, 23, 42,  0.95)
+  );
+  background-size: 400% 400%;
+  animation: header-gradient 8s ease infinite;
+}
+
+/* ── Water progress bar shimmer ─────────────────────────────── */
+@keyframes water-flow {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.water-bar {
+  background: linear-gradient(90deg, #06b6d4, #3b82f6, #67e8f9, #06b6d4);
+  background-size: 250% 100%;
+  animation: water-flow 2.5s linear infinite;
+}
+.water-bar-hit {
+  background: linear-gradient(90deg, #22d3ee, #818cf8, #34d399, #22d3ee);
+  background-size: 250% 100%;
+  animation: water-flow 2s linear infinite;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.55);
+}
+
+/* ── Widget card transition (hover color handled per widget) ─── */
 .widget-card {
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
-.widget-card:hover {
-  border-color: rgba(99, 102, 241, 0.25);
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.07);
-}
+
+/* ── Per-accent hover glows ─────────────────────────────────── */
+.card-glow-violet:hover  { border-color: rgba(139, 92,  246, 0.5); box-shadow: 0 0 0 1px rgba(139, 92,  246, 0.1), 0 4px 32px rgba(139, 92,  246, 0.18); }
+.card-glow-pink:hover    { border-color: rgba(236, 72,  153, 0.5); box-shadow: 0 0 0 1px rgba(236, 72,  153, 0.1), 0 4px 32px rgba(236, 72,  153, 0.18); }
+.card-glow-cyan:hover    { border-color: rgba(6,   182, 212, 0.5); box-shadow: 0 0 0 1px rgba(6,   182, 212, 0.1), 0 4px 32px rgba(6,   182, 212, 0.18); }
+.card-glow-emerald:hover { border-color: rgba(16,  185, 129, 0.5); box-shadow: 0 0 0 1px rgba(16,  185, 129, 0.1), 0 4px 32px rgba(16,  185, 129, 0.18); }
+.card-glow-orange:hover  { border-color: rgba(249, 115, 22,  0.5); box-shadow: 0 0 0 1px rgba(249, 115, 22,  0.1), 0 4px 32px rgba(249, 115, 22,  0.18); }
+.card-glow-yellow:hover  { border-color: rgba(234, 179, 8,   0.5); box-shadow: 0 0 0 1px rgba(234, 179, 8,   0.1), 0 4px 32px rgba(234, 179, 8,   0.18); }
+.card-glow-blue:hover    { border-color: rgba(59,  130, 246, 0.5); box-shadow: 0 0 0 1px rgba(59,  130, 246, 0.1), 0 4px 32px rgba(59,  130, 246, 0.18); }
+.card-glow-indigo:hover  { border-color: rgba(99,  102, 241, 0.5); box-shadow: 0 0 0 1px rgba(99,  102, 241, 0.1), 0 4px 32px rgba(99,  102, 241, 0.18); }
+.card-glow-purple:hover  { border-color: rgba(168, 85,  247, 0.5); box-shadow: 0 0 0 1px rgba(168, 85,  247, 0.1), 0 4px 32px rgba(168, 85,  247, 0.18); }
 
 /* ── Habit checkbox spring pop ──────────────────────────────── */
 @keyframes spring-pop {
@@ -56,7 +94,18 @@ body {
   animation: slide-up 0.2s ease-out;
 }
 
-/* ── Momentum ring track/progress smooth transition ─────────── */
-circle[class*="progress"] {
-  transition: stroke-dashoffset 0.5s ease, stroke 0.5s ease;
+/* ── Chat empty state gentle pulse ─────────────────────────── */
+@keyframes gentle-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 0.3;  }
 }
+.animate-gentle-pulse {
+  animation: gentle-pulse 2.5s ease-in-out infinite;
+}
+
+/* ── Dark scrollbars ────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 5px; height: 5px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: rgba(99, 102, 241, 0.35); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.55); }
+* { scrollbar-width: thin; scrollbar-color: rgba(99, 102, 241, 0.35) transparent; }

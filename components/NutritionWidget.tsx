@@ -17,6 +17,13 @@ const SLOT_LABELS: Record<MealSlot, string> = {
   snack: "Snack",
 };
 
+const SLOT_DOT: Record<MealSlot, string> = {
+  breakfast: "bg-yellow-400",
+  lunch: "bg-green-400",
+  dinner: "bg-blue-400",
+  snack: "bg-pink-400",
+};
+
 type SlotForm = { desc: string; kcal: string; saving: boolean };
 
 function emptyForm(): SlotForm {
@@ -78,9 +85,10 @@ export default function NutritionWidget() {
   }
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 min-h-48 widget-card">
-      <div className="mb-4">
-        <p className="text-xs text-gray-500 uppercase tracking-widest font-medium">
+    <div className="bg-gray-900 border border-gray-700/50 rounded-xl p-5 min-h-48 widget-card card-glow-yellow">
+      <div className="flex items-center gap-2 mb-5">
+        <span className="w-0.5 h-3.5 bg-yellow-500 rounded-full" aria-hidden />
+        <p className="text-xs text-yellow-400/80 uppercase tracking-widest font-semibold">
           Nutrition
         </p>
       </div>
@@ -101,12 +109,13 @@ export default function NutritionWidget() {
               <div key={slot}>
                 {idx > 0 && <Separator className="my-4" />}
 
-                {/* Slot label */}
-                <p className="text-xs text-gray-500 font-medium mb-2">
-                  {SLOT_LABELS[slot]}
-                </p>
+                <div className="flex items-center gap-1.5 mb-2">
+                  <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${SLOT_DOT[slot]}`} aria-hidden />
+                  <p className="text-xs text-gray-400 font-medium">
+                    {SLOT_LABELS[slot]}
+                  </p>
+                </div>
 
-                {/* Existing entries */}
                 {slotEntries.length > 0 && (
                   <ul className="space-y-0.5 mb-2">
                     {slotEntries.map((entry) => (
@@ -114,7 +123,7 @@ export default function NutritionWidget() {
                         key={entry.id}
                         className="flex items-baseline justify-between gap-2 text-sm"
                       >
-                        <span className="text-gray-300">{entry.description}</span>
+                        <span className="text-gray-200">{entry.description}</span>
                         {entry.calories != null && (
                           <span className="text-xs text-gray-500 tabular-nums flex-shrink-0">
                             {entry.calories} kcal
@@ -125,7 +134,6 @@ export default function NutritionWidget() {
                   </ul>
                 )}
 
-                {/* Add form */}
                 <div
                   className="flex gap-2"
                   onBlur={(e) => {
@@ -141,12 +149,10 @@ export default function NutritionWidget() {
                     type="text"
                     value={slotForm.desc}
                     onChange={(e) => update(slot, { desc: e.target.value })}
-                    onKeyDown={(e) =>
-                      e.key === "Enter" && save(slot, slotForm)
-                    }
+                    onKeyDown={(e) => e.key === "Enter" && save(slot, slotForm)}
                     placeholder={`Add ${SLOT_LABELS[slot].toLowerCase()}…`}
                     disabled={slotForm.saving}
-                    className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-600 focus:outline-none focus:border-gray-500 disabled:opacity-50 min-w-0"
+                    className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/25 disabled:opacity-50 min-w-0"
                   />
                   <input
                     type="number"
@@ -154,12 +160,10 @@ export default function NutritionWidget() {
                     max="9999"
                     value={slotForm.kcal}
                     onChange={(e) => update(slot, { kcal: e.target.value })}
-                    onKeyDown={(e) =>
-                      e.key === "Enter" && save(slot, slotForm)
-                    }
+                    onKeyDown={(e) => e.key === "Enter" && save(slot, slotForm)}
                     placeholder="kcal"
                     disabled={slotForm.saving}
-                    className="w-16 bg-gray-800 border border-gray-700 rounded-lg px-2 py-2 text-sm text-gray-100 placeholder-gray-600 focus:outline-none focus:border-gray-500 tabular-nums disabled:opacity-50"
+                    className="w-16 bg-gray-800 border border-gray-700 rounded-lg px-2 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/25 tabular-nums disabled:opacity-50"
                   />
                   <button
                     onClick={() => save(slot, slotForm)}

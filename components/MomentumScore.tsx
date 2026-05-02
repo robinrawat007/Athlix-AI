@@ -9,14 +9,7 @@ type FullBreakdown = MomentumBreakdown & { date: string };
 
 const RADIUS = 30;
 const CIRC = 2 * Math.PI * RADIUS;
-
-function ringColor(n: number): string {
-  if (n >= 80) return "#34d399";
-  if (n >= 60) return "#a3e635";
-  if (n >= 40) return "#facc15";
-  if (n >= 20) return "#fb923c";
-  return "#e5e7eb";
-}
+const STROKE = 6;
 
 function textColorClass(n: number): string {
   if (n >= 80) return "text-emerald-400";
@@ -52,9 +45,7 @@ export default function MomentumScore() {
 
   useEffect(() => {
     fetchScore();
-    function onRefresh() {
-      fetchScore();
-    }
+    function onRefresh() { fetchScore(); }
     window.addEventListener("momentum:refresh", onRefresh);
     return () => window.removeEventListener("momentum:refresh", onRefresh);
   }, []);
@@ -74,33 +65,16 @@ export default function MomentumScore() {
         setDisplayed(next);
       },
     });
-    return () => {
-      tweenRef.current?.kill();
-    };
+    return () => { tweenRef.current?.kill(); };
   }, [breakdown]);
 
-  const color = ringColor(displayed);
-  const offset =
-    breakdown !== null ? CIRC * (1 - breakdown.total / 100) : CIRC;
+  const offset = breakdown !== null ? CIRC * (1 - breakdown.total / 100) : CIRC;
 
   if (breakdown === null) {
     return (
-      <div className="w-[72px] h-[72px] flex items-center justify-center">
-        <svg
-          width="72"
-          height="72"
-          viewBox="0 0 72 72"
-          style={{ transform: "rotate(-90deg)" }}
-          aria-hidden
-        >
-          <circle
-            cx="36"
-            cy="36"
-            r={RADIUS}
-            fill="none"
-            stroke="#1f2937"
-            strokeWidth="4"
-          />
+      <div className="w-[76px] h-[76px] flex items-center justify-center">
+        <svg width="76" height="76" viewBox="0 0 76 76" aria-hidden>
+          <circle cx="38" cy="38" r={RADIUS} fill="none" stroke="#1f2937" strokeWidth={STROKE} />
         </svg>
       </div>
     );
@@ -111,45 +85,51 @@ export default function MomentumScore() {
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
           <div
-            className="relative w-[72px] h-[72px] cursor-default select-none"
+            className="relative w-[76px] h-[76px] cursor-default select-none"
             aria-label={`Momentum score: ${displayed}`}
           >
             <svg
-              width="72"
-              height="72"
-              viewBox="0 0 72 72"
+              width="76"
+              height="76"
+              viewBox="0 0 76 76"
               className="absolute inset-0"
               style={{ transform: "rotate(-90deg)" }}
               aria-hidden
             >
+              <defs>
+                {/* indigo-400 → violet-400 → emerald-400 */}
+                <linearGradient
+                  id="ring-grad"
+                  x1="38" y1="8" x2="38" y2="68"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0%"   stopColor="#818cf8" />
+                  <stop offset="50%"  stopColor="#a78bfa" />
+                  <stop offset="100%" stopColor="#34d399" />
+                </linearGradient>
+              </defs>
               {/* Track */}
               <circle
-                cx="36"
-                cy="36"
-                r={RADIUS}
+                cx="38" cy="38" r={RADIUS}
                 fill="none"
                 stroke="#1f2937"
-                strokeWidth="4"
+                strokeWidth={STROKE}
               />
               {/* Progress */}
               <circle
-                cx="36"
-                cy="36"
-                r={RADIUS}
+                cx="38" cy="38" r={RADIUS}
                 fill="none"
-                stroke={color}
-                strokeWidth="4"
+                stroke="url(#ring-grad)"
+                strokeWidth={STROKE}
                 strokeDasharray={CIRC}
                 strokeDashoffset={offset}
                 strokeLinecap="round"
-                style={{
-                  transition: "stroke-dashoffset 0.5s ease, stroke 0.5s ease",
-                }}
+                style={{ transition: "stroke-dashoffset 0.5s ease" }}
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
               <span
-                className={`text-xl font-bold tabular-nums leading-none transition-colors duration-500 ${textColorClass(displayed)}`}
+                className={`text-2xl font-bold tabular-nums leading-none transition-colors duration-500 ${textColorClass(displayed)}`}
               >
                 {displayed}
               </span>
@@ -161,9 +141,9 @@ export default function MomentumScore() {
             side="bottom"
             align="end"
             sideOffset={10}
-            className="z-50 rounded-xl bg-gray-900 border border-gray-700 px-3 py-3 shadow-2xl"
+            className="z-50 rounded-xl bg-gray-900 border border-gray-700/60 px-3 py-3 shadow-2xl"
           >
-            <p className="text-[10px] text-gray-500 uppercase tracking-widest font-medium mb-2.5">
+            <p className="text-[10px] text-indigo-400/70 uppercase tracking-widest font-semibold mb-2.5">
               Score Breakdown
             </p>
             <div className="space-y-2">
@@ -171,13 +151,14 @@ export default function MomentumScore() {
                 const val = breakdown[key];
                 return (
                   <div key={key} className="flex items-center gap-2.5">
-                    <span className="text-xs text-gray-400 w-14 shrink-0">
-                      {label}
-                    </span>
+                    <span className="text-xs text-gray-400 w-14 shrink-0">{label}</span>
                     <div className="flex-1 h-1 bg-gray-800 rounded-full overflow-hidden w-24">
                       <div
-                        className="h-full rounded-full bg-indigo-400"
-                        style={{ width: `${(val / max) * 100}%` }}
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${(val / max) * 100}%`,
+                          background: "linear-gradient(to right, #818cf8, #a78bfa)",
+                        }}
                       />
                     </div>
                     <span className="text-xs text-gray-300 tabular-nums w-8 text-right shrink-0">

@@ -5,14 +5,7 @@ import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/Skeleton";
 import type { WorkoutLog } from "@/lib/types";
 
-const WORKOUT_TYPES = [
-  "push",
-  "pull",
-  "legs",
-  "cardio",
-  "rest",
-  "other",
-] as const;
+const WORKOUT_TYPES = ["push", "pull", "legs", "cardio", "rest", "other"] as const;
 type WorkoutType = (typeof WORKOUT_TYPES)[number];
 
 const TYPE_LABELS: Record<WorkoutType, string> = {
@@ -23,6 +16,14 @@ const TYPE_LABELS: Record<WorkoutType, string> = {
   rest: "Rest",
   other: "Other",
 };
+
+const INTENSITY_COLORS = [
+  "#facc15", // 1 — yellow-400
+  "#fb923c", // 2 — orange-400
+  "#f97316", // 3 — orange-500
+  "#ef4444", // 4 — red-500
+  "#dc2626", // 5 — red-600
+];
 
 function IntensityDots({
   value,
@@ -39,11 +40,10 @@ function IntensityDots({
           type="button"
           onClick={() => onChange(v === value ? 0 : v)}
           aria-label={`Intensity ${v}`}
-          className={`w-7 h-7 rounded-full transition-colors ${
-            v <= value
-              ? "bg-orange-500 hover:bg-orange-400"
-              : "bg-gray-700 hover:bg-gray-600"
+          className={`w-7 h-7 rounded-full transition-all duration-150 ${
+            v <= value ? "scale-110" : "bg-gray-700/60 hover:bg-gray-600"
           }`}
+          style={v <= value ? { backgroundColor: INTENSITY_COLORS[v - 1], boxShadow: `0 0 8px ${INTENSITY_COLORS[v - 1]}80` } : undefined}
         />
       ))}
     </div>
@@ -102,9 +102,10 @@ export default function WorkoutWidget() {
   }
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 min-h-48 widget-card">
-      <div className="mb-4">
-        <p className="text-xs text-gray-500 uppercase tracking-widest font-medium">
+    <div className="bg-gray-900 border border-gray-700/50 rounded-xl p-5 min-h-48 widget-card card-glow-orange">
+      <div className="flex items-center gap-2 mb-5">
+        <span className="w-0.5 h-3.5 bg-orange-500 rounded-full" aria-hidden />
+        <p className="text-xs text-orange-400/80 uppercase tracking-widest font-semibold">
           Workout
         </p>
       </div>
@@ -116,13 +117,13 @@ export default function WorkoutWidget() {
           <Skeleton className="h-9" />
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {/* Type + Duration */}
           <div className="flex gap-2">
             <select
               value={type}
               onChange={(e) => setType(e.target.value as WorkoutType)}
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-gray-500"
+              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/25"
             >
               {WORKOUT_TYPES.map((t) => (
                 <option key={t} value={t}>
@@ -132,21 +133,21 @@ export default function WorkoutWidget() {
             </select>
             <div className="flex items-center gap-1.5">
               <input
-                type="number"
-                min="1"
-                max="300"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                placeholder="—"
-                className="w-14 bg-gray-800 border border-gray-700 rounded-lg px-2 py-2 text-sm text-gray-100 placeholder-gray-600 focus:outline-none focus:border-gray-500 tabular-nums text-center"
+                onChange={(e) => setDuration(e.target.value.replace(/\D/g, ""))}
+                placeholder="45"
+                className="w-14 bg-gray-800 border border-gray-700 rounded-lg px-2 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/25 tabular-nums text-center"
               />
-              <span className="text-xs text-gray-600">min</span>
+              <span className="text-xs text-gray-500">min</span>
             </div>
           </div>
 
           {/* Intensity */}
           <div>
-            <label className="block text-xs text-gray-500 mb-1.5">
+            <label className="block text-xs text-gray-500 mb-2">
               Intensity{intensity > 0 ? ` — ${intensity} / 5` : ""}
             </label>
             <IntensityDots value={intensity} onChange={setIntensity} />
@@ -159,7 +160,7 @@ export default function WorkoutWidget() {
             onChange={(e) => setNotes(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleLog()}
             placeholder="Notes (optional)"
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-600 focus:outline-none focus:border-gray-500"
+            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/25"
           />
 
           {/* Log button */}
@@ -167,7 +168,7 @@ export default function WorkoutWidget() {
             <button
               onClick={handleLog}
               disabled={submitting}
-              className="px-4 py-2 min-h-[44px] text-sm bg-orange-800 hover:bg-orange-700 text-white rounded-lg transition-colors disabled:opacity-50"
+              className="px-4 py-2 min-h-[44px] text-sm bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg transition-all hover:shadow-[0_0_14px_rgba(139,92,246,0.4)] disabled:opacity-50"
             >
               {submitting ? "Logging…" : "Log Workout"}
             </button>
@@ -179,7 +180,7 @@ export default function WorkoutWidget() {
               {logs.map((log) => (
                 <div key={log.id}>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-300 font-medium">
+                    <span className="text-sm text-gray-200 font-medium">
                       {TYPE_LABELS[log.type]}
                     </span>
                     {log.duration != null && (
@@ -192,9 +193,12 @@ export default function WorkoutWidget() {
                         {[1, 2, 3, 4, 5].map((v) => (
                           <span
                             key={v}
-                            className={`w-2 h-2 rounded-full ${
-                              v <= log.intensity! ? "bg-orange-500" : "bg-gray-700"
-                            }`}
+                            className="w-2 h-2 rounded-full"
+                            style={
+                              v <= log.intensity!
+                                ? { backgroundColor: INTENSITY_COLORS[v - 1] }
+                                : { backgroundColor: "#374151" }
+                            }
                           />
                         ))}
                       </div>
