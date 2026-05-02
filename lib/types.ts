@@ -30,6 +30,7 @@ export interface HabitLog {
 export interface HabitWithLog extends Habit {
   completed: boolean;
   logged_at: string | null;
+  streak: number;
 }
 
 export interface WorkoutLog {
@@ -55,7 +56,16 @@ export interface WaterEntry {
   id: number;
   date: string;
   amount_ml: number;
-  logged_at: string;
+  logged_at: string | null;
+}
+
+export interface WorkTask {
+  id: number;
+  date: string;
+  title: string;
+  done: boolean;
+  sort_order: number;
+  created_at: string;
 }
 
 export interface NewsHeadline {

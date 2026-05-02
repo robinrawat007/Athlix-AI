@@ -4,7 +4,11 @@
       "mcp__claude_ai_Supabase__list_projects",
       "mcp__claude_ai_Supabase__get_cost",
       "mcp__claude_ai_Supabase__confirm_cost",
-      "mcp__claude_ai_Supabase__create_project"
+      "mcp__claude_ai_Supabase__create_project",
+      "Bash(npx tsc *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"require\\('gsap'\\); require\\('sonner'\\); require\\('@radix-ui/react-tooltip'\\); require\\('@radix-ui/react-separator'\\); console.log\\('all ok'\\)\")",
+      "Bash(node -e \"const fs=require\\('fs'\\); ['lib/cn.ts','components/ui/Skeleton.tsx','components/ui/Badge.tsx','components/ui/Separator.tsx','components/DashboardAnimator.tsx','components/MobileBottomBar.tsx','components/MomentumScore.tsx'].forEach\\(f => { try{fs.statSync\\(f\\); console.log\\('✓ '+f\\)}catch{console.log\\('✗ '+f\\)} }\\)\")"
     ]
   }
 }

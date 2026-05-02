@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
 
     const { data, error } = await supabase
       .from("water_entries")
-      .insert({ date, amount_ml: Math.round(amount_ml) })
+      .insert({ date, amount_ml: Math.round(amount_ml), logged_at: new Date().toISOString() })
       .select()
       .single();
 

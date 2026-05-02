@@ -9,3 +9,54 @@
 body {
   @apply bg-gray-950 text-gray-100;
 }
+
+/* ── Shimmer skeleton ────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    #1f2937 25%,
+    #374151 50%,
+    #1f2937 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+/* ── Widget card hover glow ─────────────────────────────────── */
+.widget-card {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.widget-card:hover {
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.07);
+}
+
+/* ── Habit checkbox spring pop ──────────────────────────────── */
+@keyframes spring-pop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.35); }
+  65%  { transform: scale(0.88); }
+  82%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+.animate-pop {
+  animation: spring-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Chat message slide-up ──────────────────────────────────── */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slide-up 0.2s ease-out;
+}
+
+/* ── Momentum ring track/progress smooth transition ─────────── */
+circle[class*="progress"] {
+  transition: stroke-dashoffset 0.5s ease, stroke 0.5s ease;
+}
